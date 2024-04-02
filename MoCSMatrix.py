@@ -3,10 +3,6 @@ import pandas as pd
 import datetime
 import matplotlib.pyplot as plt
 
-# Define the stock ticker and the moving average period
-#ticker = "AAPL"  # Example: Apple Inc.
-smp500 = "INX"
-n = 50  # Example: 50-day moving averag
 
 def tommorowYF():
    return (datetime.date.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
@@ -20,7 +16,6 @@ def datesFromPeriod(period):
    return start_date, end_date
 
 def getNthPeriodEMA(period, data):
-   #stock_data = yf.download(ticker,period=period,interval="1d")
    return data.ewm(span=period, adjust=False).mean()
    
 #start_date=todayYF(), end_date=datesFromPeriod(50)[1]
@@ -54,8 +49,8 @@ def positiveOrNegativeSince(data):
    return sign, since
 
 
-#tickers = ["VOO", "AAPL" , "MSFT","GOOGL","TSLA","AMZN", "META", "JPM", "NVDA", "AMD", "V", "LMT", "DELL", "SNOW", "GME", "AMC"]
-tickers = ["VOO", "AAPL"]
+tickers = ["VOO", "AAPL" , "MSFT","GOOGL","TSLA","AMZN", "META", "JPM", "NVDA", "AMD", "V", "LMT", "DELL", "SNOW", "GME", "AMC"]
+#tickers = ["VOO", "AAPL"]
 MoCSMatrix = pd.DataFrame(columns=tickers, index=tickers)
 
 for i, ticker1 in enumerate(tickers):
@@ -106,32 +101,6 @@ def highlight_cell(x):
 
 styled_MoCSMatrix = MoCSMatrix.style.applymap(highlight_cell)
 styled_MoCSMatrix.to_excel('MoCSMatrixsmall.xlsx', engine='openpyxl')
-'''
-fig, axs = plt.subplots(len(tickers), len(tickers), figsize=(12, 12))
-
-lines_labels = []
-for i, ticker1 in enumerate(tickers):
-   for j, ticker2 in enumerate(tickers):
-      if ticker1 != ticker2:
-         key, data = MoCS([ticker1, ticker2])
-         data = data.last('30d')
-         data.index = data.index.strftime('%m/%d')
-         axs[i, j].set_title(key)
-         line1, = axs[i, j].plot(data[key+'_MoCS'], label='MoCS')
-         line2, = axs[i, j].plot(data[key+'_Signal'], label='Signal')
-         line3, = axs[i, j].plot(data[key+'_Histogram'], label='Histogram')
-         axs[i,j].set_xticks(range(0, len(data.index), 5))
-         #axs[i, j].legend()
-lines = [line1, line2, line3]
-labels = [l.get_label() for l in lines]
-lines_labels.extend(list(zip(lines, labels)))
-
-lines,labels = zip(*lines_labels)
-fig.legend(lines, labels, loc='upper right')
-plt.tight_layout(pad=2.0)
-plt.show()
-'''
-#key, data = MoCS(tickers)
 today_data = data.loc[data.index[-1]]
 print(key)
 print("Today Data")
@@ -142,16 +111,7 @@ print(data[key+'_MoCS'], data[key+'_Signal'], data[key+'_Histogram'])
 plt.title(key)
 plt.plot(data[key+'_MoCS'], label='MoCS')
 plt.plot(data[key+'_Signal'], label='Signal')
-#plt.plot(data[key+'_Histogram'], label='Histogram')
 plt.legend()
 plt.show()
 
-#end_date = (datetime.date.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
-
-
-# Calculate the nth-period simple moving average (SMA)
-#stock_data['EMA'] = stock_data['Close'].ewm(span=26, adjust=False).mean()
-
-# Display the data
-#print(stock_data[['EMA','Close']])
 
